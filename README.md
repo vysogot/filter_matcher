@@ -126,6 +126,12 @@ Full PeopleMatcher class example, that is responsible only for the matching is s
       end
     end
 
+
+Filtering real data by SQL or JS
+==
+
+Remeber that often you can filter your data much more efficient with DB languages. This filtering method should be used when the filtering logic is highly application-dependent. Good SQL query (or smart map reduce) before application filter-matching is always a better approach.
+
 Feel free to contribute or give any feedback
 ==
 
