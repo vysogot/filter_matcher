@@ -67,12 +67,22 @@ Now, in order to run them all on the collection, we run the filter_and_match met
     end
 
 If any filter returns an empty result then next filter is given the collection of the last not empty result or the original data itself.
-
 If a single result will be found the elemnt_matched method will be triggered. In this example we just change the entry's flag:
 
   def element_matched(element)
     element[:matched] = true
   end
+
+The expected result is the db matched like:
+
+db == [
+  {:id => 1, :name => "John",  :age => 33, :homepage => "www.johny.com",     :matched => false}
+  {:id => 2, :name => "Mike",  :age => 30, :homepage => "www.mikes.com",     :matched => false}
+  {:id => 3, :name => "Johny", :age => 25, :homepage => "www.johny.com",     :matched => false}
+  {:id => 4, :name => "Mike",  :age => 30, :homepage => "www.realmike.com",  :matched => true}
+  {:id => 5, :name => "Dan",   :age => 25, :homepage => "www.danny.com",     :matched => true}
+  {:id => 6, :name => "Dan",   :age => 40, :homepage => "www.fakedanny.com", :matched => false}
+]
 
 Full PeopleMatcher class example, that is responsible only for the matching is shown below:
 
