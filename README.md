@@ -126,6 +126,19 @@ Full PeopleMatcher class example, that is responsible only for the matching is s
       end
     end
 
+Visual example
+==
+Filtering a collection
+
+    [1,2,3] --first_filter--> [2,3] ---second_filter--> [2] -> we found a match
+
+    or
+
+    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [3] -> we found a match
+
+    or
+
+    [1,2,3] --first_filter--> [1,2] --second_filter--> [1,2] --third_filter--> [1]
 
 Filtering real data by SQL or JS
 ==
