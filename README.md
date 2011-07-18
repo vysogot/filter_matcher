@@ -130,15 +130,15 @@ Visual example
 ==
 Filtering a collection
 
-    [1,2,3] --first_filter--> [2,3] ---second_filter--> [2] -> we found a match
+    [1,2,3] --first_filter--> [2,3] ---second_filter--> [2] -> match
 
-    or
+    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [3] -> match
 
-    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [3] -> we found a match
+    [1,2,3] --first_filter--> [1,2] --second_filter--> [1,2] --third_filter--> [1] -> match
 
-    or
+    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [] --> [1,2,3] --third_filter--> [] -> no match
 
-    [1,2,3] --first_filter--> [1,2] --second_filter--> [1,2] --third_filter--> [1]
+    [1,2,3] --first_filter--> [1,2,3] --second_filter--> [2,3] --third_filter--> [2,3] -> no match
 
 Filtering real data by SQL or JS
 ==
