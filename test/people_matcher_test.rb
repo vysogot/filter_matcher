@@ -1,6 +1,6 @@
 require 'bundler/setup'
 require 'test/unit'
-require 'filter_matcher/people_matcher'
+require File.expand_path(File.dirname(__FILE__) + '/people_matcher')
 
 class PeopleMatcherTest < Test::Unit::TestCase
   def setup
