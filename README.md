@@ -160,5 +160,5 @@ Did you find it usefull any how? Please let me know, and if you can want to impr
 Contributors
 ==
 
-[Albert Llop](https://github.com/mrsimo)
+[Albert Llop](https://github.com/mrsimo),
 [Sebastian Röbke](https://github.com/boosty)
