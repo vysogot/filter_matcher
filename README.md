@@ -36,42 +36,52 @@ First we need to specify how we want to filter our data to find the best match. 
 
 Lets say the most important is the name. If name filter finds a single result then this is a match. We can define the filter like:
 
-    def name_filter(collection, name)
-      collection.select { |element| element[:name] == name }
+    m.filter do |col|
+      col.select { |element| element[:name] == name }
     end
-
-The filter has to be named in the convention: <what_it_filters>_filter
 
 If this is not sufficient we run another filter on the result of the previous one. Lets define another filter, saying that the second most important thing to find a match is age.
 
-    def age_filter(collection, age)
-      collection.select { |element| element[:age] == age}
+    m.filter do |col|
+      col.select { |element| element[:age] == age}
     end
 
 Simple and very similar to the previous one. Filters can have any logic you need. Lets define the last one - homepage filter.
 
-    def homepage_filter(collection, homepage)
-      collection.select { |element| element[:homepage] == homepage }
+    m.filter do |col|
+      col.select { |element| element[:homepage] == homepage }
     end
 
-Now, in order to run them all on the collection, we run the filter_and_match method:
+Now, in order to run them all on the collection, we run the matcher method:
 
     @input.each do |input|
       collection = @db
 
-      filter_and_match collection, {
-        :by_name => input[:name],
-        :by_age  => input[:age],
-        :by_homepage => input[:homepage]
-      }
+      matcher(collection) do |m|
+        m.filter do |col|
+          col.select { |element| element[:name] == input[:name] }
+        end
+
+        m.filter do |col|
+          col.select { |element| element[:age] == input[:age]}
+        end
+
+        m.filter do |col|
+          col.select { |element| element[:homepage] == input[:homepage] }
+        end
+
+        m.match do |element|
+          element[:matched] = true
+        end
+      end
     end
 
 If any filter returns an empty result then next filter is given the collection of the last not empty result or the original data itself.
-If a single result will be found the elemnt_matched method will be triggered. In this example we just change the entry's flag:
+If a single result will be found the match block will be triggered. In this example we just change the entry's flag:
 
-  def element_matched(element)
-    element[:matched] = true
-  end
+    m.match do |element|
+      element[:matched] = true
+    end
 
 The expected result is the db matched like:
 
@@ -95,34 +105,31 @@ Full PeopleMatcher class example, that is responsible only for the matching is s
         @db, @input = db, input
       end
 
+      #
+      # run filters on all data for every input element
+      #
       def match
         @input.each do |input|
           collection = @db
 
-          filter_and_match collection, {
-            :by_name => input[:name],
-            :by_age  => input[:age],
-            :by_homepage => input[:homepage]
-          }
+         matcher(collection) do |m|
+            m.filter do |col|
+              col.select { |element| element[:name] == input[:name] }
+            end
+
+            m.filter do |col|
+              col.select { |element| element[:age] == input[:age]}
+            end
+
+            m.filter do |col|
+              col.select { |element| element[:homepage] == input[:homepage] }
+            end
+
+            m.match do |element|
+              element[:matched] = true
+            end
+          end
         end
-      end
-
-      private
-
-      def name_filter(collection, name)
-        collection.select { |element| element[:name] == name }
-      end
-
-      def age_filter(collection, age)
-        collection.select { |element| element[:age] == age}
-      end
-
-      def homepage_filter(collection, homepage)
-        collection.select { |element| element[:homepage] == homepage }
-      end
-
-      def element_matched(element)
-        element[:matched] = true
       end
     end
 
@@ -149,3 +156,9 @@ Feel free to contribute or give any feedback
 ==
 
 Did you find it usefull any how? Please let me know, and if you can want to improve it just send me a pull request.
+
+Contributors
+==
+
+[Albert Llop](https://github.com/mrsimo)
+[Sebastian Röbke](https://github.com/boosty)
