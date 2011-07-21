@@ -1,8 +1,31 @@
-require 'bundler/setup'
-require 'test/unit'
-require File.expand_path(File.dirname(__FILE__) + '/people_matcher')
+require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
-class PeopleMatcherTest < Test::Unit::TestCase
+class FirstFromTopMatcherTest < Test::Unit::TestCase
+
+  def run_matcher(input)
+    input.each do |input|
+      collection = @db
+
+      matcher(collection, :single) do |m|
+        m.filter do |col|
+          col.select { |element| element[:name] == input[:name] }
+        end
+
+        m.filter do |col|
+          col.select { |element| element[:age] == input[:age]}
+        end
+
+        m.filter do |col|
+          col.select { |element| element[:homepage] == input[:homepage] }
+        end
+
+        m.match do |element|
+          element[:matched] = true
+        end
+      end
+    end
+  end
+
   def setup
     @db = [
       { :id => 1, :name => "John",  :age => 33, :homepage => "www.johny.com",     :matched => false },
@@ -20,7 +43,9 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :name => "Johny" }
     ]
 
-    assert_matched(input, [1, 3])
+    run_matcher(input)
+
+    assert_matched(@db, input, [1, 3])
   end
 
   def test_filters_by_name_and_then_by_age
@@ -28,7 +53,9 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :name => "Dan", :age => 40 }
     ]
 
-    assert_matched(input, [6])
+    run_matcher(input)
+
+    assert_matched(@db, input, [6])
   end
 
   def test_filters_by_name_and_then_by_age_and_then_by_homepage
@@ -37,7 +64,9 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :name => "Dan", :homepage => "www.danny.com" }
     ]
 
-    assert_matched(input, [4, 5])
+    run_matcher(input)
+
+    assert_matched(@db, input, [4, 5])
   end
 
   def test_filters_by_age_and_then_by_homepage_name_not_given
@@ -45,7 +74,9 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :age => 25, :homepage => "www.johny.com" }
     ]
 
-    assert_matched(input, [3])
+    run_matcher(input)
+
+    assert_matched(@db, input, [3])
   end
 
   def test_doesnt_match_if_nothing_matched
@@ -53,7 +84,9 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :name => "George" }
     ]
 
-    assert_matched(input, [])
+    run_matcher(input)
+
+    assert_matched(@db, input, [])
   end
 
   def test_doesnt_match_if_many_matched
@@ -61,21 +94,8 @@ class PeopleMatcherTest < Test::Unit::TestCase
       { :name => "Mike", :age => 30 }
     ]
 
-    assert_matched(input, [])
-  end
+    run_matcher(input)
 
-  private
-
-  def assert_matched(input, matched)
-    matcher = PeopleMatcher.new(@db, input)
-    matcher.match
-
-    matcher.db.select {|x| matched.include?(x[:id]) }.each do |entry|
-      assert(entry[:matched], "Matched expected: #{entry.inspect}")
-    end
-
-    matcher.db.reject {|x| matched.include?(x[:id]) }.each do |entry|
-      assert(!entry[:matched], "Not matched expected: #{entry.inspect}")
-    end
+    assert_matched(@db, input, [])
   end
 end
