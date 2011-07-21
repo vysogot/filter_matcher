@@ -9,10 +9,12 @@ How to install?
 What it does?
 ==
 
-It filters a collection with defined filters. Launches the filters one by one on the collection until it finds a single result. When the result is found a final action is invoked.
+It filters a collection with defined filters. Launches the filters one by one on the collection until it finds a result. When the result is found a final action is invoked.
 
 Example
 ==
+
+This example describes SingleMatcher.
 
 Lets say we have following data about people:
 
@@ -57,7 +59,7 @@ Now, in order to run them all on the collection, we run the matcher method:
     @input.each do |input|
       collection = @db
 
-      matcher(collection) do |m|
+      matcher(collection, :single) do |m|
         m.filter do |col|
           col.select { |element| element[:name] == input[:name] }
         end
@@ -94,7 +96,7 @@ The expected result is the db matched like:
       {:id => 6, :name => "Dan",   :age => 40, :homepage => "www.fakedanny.com", :matched => false}
     ]
 
-Full PeopleMatcher class example, that is responsible only for the matching is shown below:
+Full PeopleMatcher class example, that is responsible only for the matching could look like that:
 
     class PeopleMatcher
       include FilterMatcher
@@ -133,9 +135,9 @@ Full PeopleMatcher class example, that is responsible only for the matching is s
       end
     end
 
-Visual example
+Visual examples
 ==
-Filtering a collection
+Filtering a collection with SingleMatcher
 
     [1,2,3] --first_filter--> [2,3] ---second_filter--> [2] -> match
 
@@ -146,6 +148,19 @@ Filtering a collection
     [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [] --> [1,2,3] --third_filter--> [] -> no match
 
     [1,2,3] --first_filter--> [1,2,3] --second_filter--> [2,3] --third_filter--> [2,3] -> no match
+
+Filtering a collection with FirstFromTopMatcher
+
+    [1,2,3] --first_filter--> [2,3] ---second_filter--> [2] -> matches 2
+
+    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [3] -> matches 3
+
+    [1,2,3] --first_filter--> [1,2] --second_filter--> [1,2] --third_filter--> [1, 2] -> matches 1
+
+    [1,2,3] --first_filter--> [] --> [1,2,3] --second_filter--> [] --> [1,2,3] --third_filter--> [] -> no match
+
+    [1,2,3] --first_filter--> [1,2,3] --second_filter--> [2,3] --third_filter--> [2,3] -> matches 2
+
 
 Filtering real data by SQL or JS
 ==
