@@ -8,7 +8,7 @@ filter your collection with ease
 
 ## What it does?
 
-Invokes a method on a previously filtered elements from a collection.
+Invokes a method on filtered elements from a collection.
 
 ## Example
 
@@ -134,16 +134,16 @@ class PeopleMatcher
 end
 ```
 
-## Filtering real data by SQL or JS
+## Usecases
 
-Remeber that often you can filter your data much more efficient with DB languages. This filtering method should be used when the filtering logic is highly application-dependent. Good SQL query (or smart map reduce) before application filter-matching is always a better approach.
+Matching JSON, csv or hash data. Helpful to apply any filter that cannot be applied on DB level.
 
-## Feel free to contribute or give any feedback
+## Contribution
 
 Did you find it usefull anyhow?
 Please let me know, and if you want to improve it just send me an email or pull request.
 
-## Contributors
+Contributors:
 
 [Albert Llop](https://github.com/mrsimo),
 [Sebastian Röbke](https://github.com/boosty)
