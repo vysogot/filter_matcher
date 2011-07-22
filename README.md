@@ -70,6 +70,7 @@ db == [
   {:id => 6, :name => "Dan",   :age => 40, :homepage => "www.fakedanny.com", :matched => false}
 ]
 ```
+
 ## Visual examples
 
 Filtering a collection with SingleMatcher
@@ -131,8 +132,7 @@ class PeopleMatcher
     end
   end
 end
-```ruby
-
+```
 
 ## Filtering real data by SQL or JS
 
