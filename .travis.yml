@@ -1,0 +1,10 @@
+rvm: 1.9.2
+gemfile: Gemfile
+
+notifications:
+  recipients:
+    - jakub.godawa@gmail.com
+branches:
+  only:
+    - master
+
